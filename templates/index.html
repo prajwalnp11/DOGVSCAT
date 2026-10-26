@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog vs Cat Classifier</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 40px 16px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px #00000012;
+        }
+
+        h1, .result {
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        input, button {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 14px;
+        }
+
+        button {
+            padding: 13px;
+            border: 0;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 20px;
+            background: #eff6ff;
+            border-radius: 12px;
+        }
+
+        .result h2 {
+            font-size: 28px;
+        }
+
+        .preview {
+            display: block;
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            margin: 18px auto;
+            border-radius: 10px;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 14px;
+            background: #fef2f2;
+            color: #991b1b;
+            border-radius: 8px;
+        }
+
+        .note {
+            color: #6b7280;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>🐶 Dog vs Cat Classifier 🐱</h1>
+
+        <p>Upload a picture and let the model predict whether
+           it contains a dog or a cat.</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <label for="image">Choose an image:</label>
+            <input
+                id="image"
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+            >
+            <button type="submit">Analyze Image</button>
+        </form>
+
+        {% if prediction %}
+        <section class="result">
+            <h2>
+                {{ prediction.emoji }}
+                It's a {{ prediction.label }}!
+            </h2>
+
+            {% if image_data %}
+            <img
+                class="preview"
+                src="data:image/jpeg;base64,{{ image_data }}"
+                alt="Uploaded image"
+            >
+            {% endif %}
+
+            <p>Model output: <strong>{{ prediction.score }}</strong></p>
+            <p>Estimated score-based confidence:
+                <strong>{{ prediction.confidence }}</strong>
+            </p>
+            <p class="note">
+                The class mapping and preprocessing are assumptions
+                until verified against known images.
+            </p>
+        </section>
+        {% endif %}
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+    </main>
+</body>
+</html>
